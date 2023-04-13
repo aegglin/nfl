@@ -6,17 +6,31 @@ Base = declarative_base()
 
 class Conference(Base):
     __tablename__ = 'Conferences'
+    __table_args__ = {'schema': 'Dim'}
     ConferenceId = Column(Integer(), primary_key=True)
     Conference = Column(String(3), nullable=False, unique=True)
+
+    def __init__(self, data):
+        data = data or {}
+        self.ConferenceId = data.get('ConferenceId')
+        self.Conference = data.get('Conference')
 
     def __repr__(self):
         return f"ConferenceId={self.ConferenceId} Conference={self.Conference}"
     
 class Division(Base):
     __tablename__ = 'Divisions'
+    __table_args__ = {'schema': 'Dim'}
+
     DivisionId = Column(Integer(), primary_key=True)
     Division = Column(String(5), nullable = False)
     ConferenceId = Column(Integer(), ForeignKey('Conferences.ConferenceId'))
+
+    def __init__(self, data):
+        data = data or {}
+        self.DivisionId = data.get('DivisionId')
+        self.Division = data.get('Division')
+        self.ConferenceId = data.get('ConferenceId')
 
     def __repr__(self):
         return f"DivisionId={self.DivisionId} Division={self.Division} ConferenceId={self.ConferenceId}"
@@ -24,9 +38,16 @@ class Division(Base):
 
 class Season(Base):
     __tablename__ = 'Seasons'
+    __table_args__ = {'schema':'Dim'}
     SeasonId = Column(Integer(), primary_key=True)
     StartYear = Column(Integer(), nullable=False)
     EndYear = Column(Integer(), nullable=False)
+
+    def __init__(self, data):
+        data = data or {}
+        self.SeasonId = data.get('SeasonId')
+        self.StartYear = data.get('StartYear')
+        self.EndYear = data.get('EndYear')
 
     def __repr__(self):
         return f"SeasonId={self.SeasonId} StartYear={self.StartYear} EndYear={self.EndYear}"
@@ -34,16 +55,25 @@ class Season(Base):
 
 class Team(Base):
     __tablename__ = 'Teams'
+    _table_args = {'schema':'Dim'}
     TeamId = Column(Integer(), primary_key=True)
     CityName = Column(String(200), nullable=False, unique=True)
     ConferenceId = Column(Integer(), ForeignKey('Conferences.ConferenceId'))
     Nickname = Column(String(200), nullable=False)
+
+    def __init__(self, data):
+        data = data or {}
+        self.TeamId = data.get('TeamId')
+        self.CityName = data.get('CityName')
+        self.ConferenceId = data.get('ConferenceId')
+        self.Nickname = data.get('Nickname')
 
     def __repr__(self):
         return f"TeamId={self.TeamId} CityName={self.CityName} ConferenceId={self.ConferenceId} Nickname={self.Nickname}"
     
 class Game(Base):
     __tablename__ = 'Games'
+    _table_args__ = {'schema':'Fact'}
     GameId = Column(Integer(), primary_key=True)
     SeasonId = Column(Integer(), ForeignKey('Seasons.SeasonId'))
     GameType = Column(String(3), nullable=False)
