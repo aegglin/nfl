@@ -21,14 +21,14 @@ def import_data():
             fumbles = sack_fumbles_lost + rushing_fumbles_lost + receiving_fumbles_lost,
             two_point_conversions = receiving_2pt_conversions + rushing_2pt_conversions
         ) %>%
-        dplyr::arrange(-yards) %>%s
+        dplyr::arrange(-yards) %>%
         dplyr::select(player_name, season, recent_team, week, carries, receptions, touches, yards, tds, completions, passing_yards, passing_tds, interceptions, passing_2pt_conversions, special_teams_tds, two_point_conversions, fumbles)
 
         data <- data[order(data$week, data$player_name),]
         write.csv(data, "data.csv")
 
         write.csv(nflfastR::teams_colors_logos, "teams.csv")
-        write.csv(nflfastR::fast_scraper_schedules(2020:2022, "schedule.csv")
+        write.csv(nflfastR::fast_scraper_schedules(2020:2022), "schedule.csv")
     """
     )
 
@@ -44,7 +44,30 @@ def import_data():
     return data, teams, schedule
 
 
+def import_schedule(data):
+    pass
+
+
 def main():
-    schedule = import_data()
+    data, teams, schedule = import_data()
+
+    game_cols = [
+        "game_type",
+        "week",
+        "gameday",
+        "gametime",
+        "weekday",
+        "home_score",
+        "away_score",
+        "location",
+        "overtime",
+        "div_game",
+        "roof",
+        "surface",
+        "temp",
+        "wind",
+    ]
+
+    games = schedule[game_cols].copy()
 
     print(schedule.head())
