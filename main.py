@@ -7,8 +7,8 @@ import rpy2.robjects as robjects
 
 
 def import_data():
-
-    robjects.r('''
+    robjects.r(
+        """
         library(nflfastR)
         library(dplyr)
         data <- nflfastR::load_pbp(2020:2022) %>%
@@ -29,21 +29,22 @@ def import_data():
 
         write.csv(nflfastR::teams_colors_logos, "teams.csv")
         write.csv(nflfastR::fast_scraper_schedules(2020:2022, "schedule.csv")
-    ''')
+    """
+    )
 
-    # data = pd.read_csv('data.csv', index_col = 0)
-    # teams = pd.read_csv('teams.csv', index_col = 0)
-    schedule = pd.read_csv('schedule.csv', index_col=0)
+    data = pd.read_csv("data.csv", index_col=0)
+    teams = pd.read_csv("teams.csv", index_col=0)
+    schedule = pd.read_csv("schedule.csv", index_col=0)
 
     # delete the files
-    # os.remove('data.csv')
-    # os.remove('teams.csv')
-    os.remove('schedule.csv')
+    os.remove("data.csv")
+    os.remove("teams.csv")
+    os.remove("schedule.csv")
 
-    # return data, teams, schedule
-    return schedule
+    return data, teams, schedule
+
 
 def main():
     schedule = import_data()
-    
+
     print(schedule.head())
