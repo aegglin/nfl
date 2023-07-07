@@ -1,5 +1,3 @@
-import model
-
 import os
 import pandas as pd
 import sqlalchemy
@@ -11,6 +9,7 @@ def import_data():
         """
         library(nflfastR)
         library(dplyr)
+        options(nflreadr.verbose = FALSE)
         data <- nflfastR::load_pbp(2020:2022) %>%
         dplyr::filter(season_type == "REG") %>%
         nflfastR::calculate_player_stats(weekly = TRUE) %>%
@@ -51,6 +50,8 @@ def import_schedule(data):
 def main():
     data, teams, schedule = import_data()
 
+    # TODO: Missing the SeasonId, HomeTeamId, AwayTeamId
+
     game_cols = [
         "game_type",
         "week",
@@ -68,6 +69,17 @@ def main():
         "wind",
     ]
 
+    teams["city_name"] = teams["
+
+    team_cols = [
+        "team_nick",
+        "team_abbr",
+    ]
+
+    
+
     games = schedule[game_cols].copy()
 
-    print(schedule.head())
+
+if __name__ == "__main__":
+    main()
